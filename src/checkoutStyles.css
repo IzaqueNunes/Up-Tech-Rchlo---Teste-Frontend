@@ -78,13 +78,13 @@ h1, h2, h3, h4, h5, h6, label {
     display: flex;
     flex-direction: row;
     background-color: var(--background-color);
+    padding: 0 3rem;
+    gap: 1rem;
 }
 
 .content .section-style {
     display: flex;
-    flex: 1;
     width: 100%;
-    padding: 1rem 2rem 1px;
 }
 
 .content .product-section {
@@ -95,11 +95,11 @@ h1, h2, h3, h4, h5, h6, label {
 }
 
 .content .product-section .image-wrapper {
-    height: 80%;
-    padding: 2rem;
-}
-.content .product-section .image-wrapper img {
+    width: 100%;
     height: 100%;
+    background-image: url('https://static.riachuelo.com.br/RCHLO/14247984003/portrait/279d0565feb361cff852a6a792ffdb5c89890ba3.jpg');
+    background-size: contain;
+    background-repeat: no-repeat;
 }
 
 .content .product-section .product-info div {
@@ -117,8 +117,17 @@ h1, h2, h3, h4, h5, h6, label {
     color: #797979;
 }
 
-.section-form form {
+.form-section form {
     width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    flex-direction: row;    
+}
+
+.form-section {
+    display: flex;
+    flex: 3;
 }
 
 .form-group {
@@ -155,7 +164,7 @@ h1, h2, h3, h4, h5, h6, label {
 }
 
 form .submit-buttom {
-    width: 100%;
+    width: 50%;
     height: 45px;
     background-color:#3caa73;
     border: none;
@@ -167,6 +176,52 @@ form .submit-buttom {
 form .submit-buttom:hover {
     transition: 200ms all;
     background-color: #41b87c;
+}
+
+@media only screen and (max-width: 992px) {
+    .form-section {
+        display: flex;
+        flex: 2;
+    }
+
+    .form-section form {
+        grid-template-columns: repeat(1, 1fr);  
+    }
+
+    .content .product-section .image-wrapper img {
+        height: 50%;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .content {
+        flex-direction: column;
+    }
+
+    .content .product-section .image-wrapper {
+        width: 100%;
+        height: 350px;
+        background-size: contain;
+        background-repeat: no-repeat;
+    }
+
+    .content {
+        padding: 0 1rem;
+    }
+
+    .container .header {
+        height: 10vh;
+        padding: 0 1rem;
+    }
+
+    .container .header h1 {
+        font-size: 1.8rem;
+    }
+
+    .container .header .icon-wrapper h6 {
+        display: none;
+    }
+
 }
 
 ::-webkit-scrollbar-track {
