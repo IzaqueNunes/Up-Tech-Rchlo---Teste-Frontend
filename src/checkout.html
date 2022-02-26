@@ -9,25 +9,202 @@
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 
     <script>
-    function criaMascara(mascaraInput) {
-        const maximoInput = document.getElementById(`${mascaraInput}Input`).maxLength;
-        let valorInput = document.getElementById(`${mascaraInput}Input`).value;
-        const mascaras = {
-        CPF: valorInput.replace(/[^\d]/g, "").replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4")
+
+        function criaMascara(mascaraInput) {
+            const maximoInput = document.getElementById(`${mascaraInput}Input`).maxLength;
+            let valorInput = document.getElementById(`${mascaraInput}Input`).value;
+            const mascaras = {
+            CPF: valorInput.replace(/[^\d]/g, "").replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4")
+            };
+
+            if (valorInput.length === maximoInput) {
+            (document.getElementById(`${mascaraInput}Input`).value = mascaras[mascaraInput])
+            }
         };
 
-        if (valorInput.length === maximoInput) {
-        (document.getElementById(`${mascaraInput}Input`).value = mascaras[mascaraInput])
+        var acceptedCreditCards = {
+            visa: /^4[0-9]{12}(?:[0-9]{3})?$/,
+            mastercard: /^5[1-5][0-9]{14}$|^2(?:2(?:2[1-9]|[3-9][0-9])|[3-6][0-9][0-9]|7(?:[01][0-9]|20))[0-9]{12}$/,
+            amex: /^3[47][0-9]{13}$/
+        };
+
+        function validateCard(value) {
+            var value = value.replace(/\D/g, '');
+            var sum = 0;
+            var shouldDouble = false;
+            for (var i = value.length - 1; i >= 0; i--) {
+                var digit = parseInt(value.charAt(i));
+
+                if (shouldDouble) {
+                if ((digit *= 2) > 9) digit -= 9;
+                }
+
+                sum += digit;
+                shouldDouble = !shouldDouble;
+            }
+            
+            var valid = (sum % 10) == 0;
+            var accepted = false;
+            
+            Object.keys(acceptedCreditCards).forEach(function(key) {
+                var regex = acceptedCreditCards[key];
+                if (regex.test(value)) {
+                accepted = true;
+                }
+            });
+            return valid && accepted;
         }
-    };
+
+        function validateCVV(creditCard, cvv) {
+            var creditCard = creditCard.replace(/\D/g, '');
+            var cvv = cvv.replace(/\D/g, '');
+            if ((acceptedCreditCards.amex).test(creditCard)) {
+                if((/^\d{4}$/).test(cvv))
+                return true;
+            } else if ((/^\d{3}$/).test(cvv)) {
+                return true;
+            }
+            return false;
+        }
+
+        function validateEmail(email) {
+            return String(email)
+                .toLowerCase()
+                .match(
+                /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+                );
+        }
+
+        function validateCpf(CPFInput) {
+            var CPFInput = CPFInput.replace(/\D/g, '');
+            let soma = 0
+
+            soma += parseInt(CPFInput[0]) * 10
+            soma += parseInt(CPFInput[1]) * 9
+            soma += parseInt(CPFInput[2]) * 8
+            soma += parseInt(CPFInput[3]) * 7
+            soma += parseInt(CPFInput[4]) * 6
+            soma += parseInt(CPFInput[5]) * 5
+            soma += parseInt(CPFInput[6]) * 4
+            soma += parseInt(CPFInput[7]) * 3
+            soma += parseInt(CPFInput[8]) * 2
+            soma = (soma * 10) % 11
+
+            if (soma !== parseInt(CPFInput[9])) {
+                return false
+            }
+
+            soma = 0
+
+            soma += parseInt(CPFInput[0]) * 11
+            soma += parseInt(CPFInput[1]) * 10
+            soma += parseInt(CPFInput[2]) * 9
+            soma += parseInt(CPFInput[3]) * 8
+            soma += parseInt(CPFInput[4]) * 7
+            soma += parseInt(CPFInput[5]) * 6
+            soma += parseInt(CPFInput[6]) * 5
+            soma += parseInt(CPFInput[7]) * 4
+            soma += parseInt(CPFInput[8]) * 3
+            soma += parseInt(CPFInput[9]) * 2
+            soma = (soma * 10) % 11
+
+            if (soma !== parseInt(CPFInput[10])) {
+                return false
+            }
+
+            return true
+        }
+
+
+        function validateForm() {
+            let userNameRegex = /^[a-zA-Z\s]+$/;
+
+            let form = document.forms["paymentForm"];
+            let fullName = form["fullName"].value;
+            let email = form["email"].value;
+            let CPFInput = form["CPFInput"].value;
+            let cardNumber = form["cardNumber"].value;
+            let owner = form["owner"].value;
+
+    
+
+            if(!userNameRegex.test(form["fullName"].value)){
+                document.getElementById("fullName").classList.add("form-input-error")
+                return document.getElementById("fullNameError").innerText = "error"
+            } else {
+                document.getElementById("fullName").classList.remove("form-input-error")
+                document.getElementById("fullNameError").innerText = ""
+
+            }
+            
+            if(!userNameRegex.test(form["owner"].value)){
+                return document.getElementById("owner").classList.add("form-input-error")
+            } else {
+                document.getElementById("owner").classList.remove("form-input-error")
+            }
+
+                
+            if(!validateEmail(email)) {
+                return document.getElementById("email").classList.add("form-input-error")
+            } else {
+                document.getElementById("email").classList.remove("form-input-error")
+
+            }
+
+            if(!validateCpf(CPFInput)) {
+                return document.getElementById("CPFInput").classList.add("form-input-error")
+            } else {
+                document.getElementById("CPFInput").classList.remove("form-input-error")
+
+            }
+
+            if(!validateCard(cardNumber)) {
+                return document.getElementById("cardNumber").classList.add("form-input-error")
+            } else {
+                document.getElementById("cardNumber").classList.remove("form-input-error")
+
+            }
+
+            document.getElementById("sucess-modal").style.visibility = 'visible'
+            document.getElementById("container").style.overflow = 'hidden'
+
+        }
+
+        function incr() {
+            let amount = document.getElementById("amount").value;
+
+            let newAmount = document.getElementById("amount").value = parseInt(amount) + 1;
+            document.getElementById("totalAmount").innerText = parseInt(newAmount * 69.9);
+
+        }
+
+        function decr() {
+            let amount = document.getElementById("amount").value;
+
+            if(parseInt(amount) === 1){
+                return 
+            } 
+
+            let newAmount = document.getElementById("amount").value = parseInt(amount) - 1;
+            document.getElementById("totalAmount").innerText = parseInt(newAmount * 69.9);
+
+        }
+
+        function closeModal() {
+            document.getElementById("sucess-modal").style.visibility = 'hidden'
+            document.getElementById("container").style.overflow = 'auto'
+        }
+
     </script>
+
+
 
     <link rel="stylesheet" href="checkoutStyles.css">
 
     <title>Checkout</title>
 </head>
 
-<body class="container">
+<body class="container" id="container">
     <header class="header">
         <div>
             <h1>Riachuelo</h1>
@@ -52,6 +229,17 @@
 
             <div class="product-info">
                 <div>
+                    <h5>Quantidade:</h5> 
+                    <div style="display: flex; flex-direction: row; gap: 5px;">
+                        <button id="decrement" style="width: 50px" onclick="decr()">-</button>
+                        <input id="amount" type="number" value="1"/>
+                        <button id="increment" style="width: 50px" onclick="incr()">+</button>
+                    </div>
+                </div>
+                <div>
+                    <label>Valor total: <span id="totalAmount">R$ 69</span></label>       
+                </div>
+                <div>
                     <h5>Produto:</h5> 
                     <h6>Camiseta Manga Curta Malha Tie Dye The Simpsons Branco Riachuelo</h6>
                 </div>
@@ -71,36 +259,31 @@
         </section>
 
         <section class="section-style form-section">
-            <form>
-                <div class="form-group">
+            <form id="paymentForm" name="paymentForm" onsubmit="validateForm()" >
+                <div class="form-control">
                     <h4>Dados Pessoais</h4>
-                    <div class="form-control">
+                    <div class="form-group">
                         <label>Nome completo</label>
-                        <input type="text" id="fullName" name="fullName" maxlength="200" required/>
+                        <input type="text" id="fullName" pattern=”[a-zA-Z\s]+$” name="fullName" maxlength="200" required oninvalid="this.setCustomValidity('Digite o seu nome')" oninput="this.setCustomValidity('')"/>
+                        <span id="fullNameError"></span>
                     </div>
-                    <div class="form-control">
+                    <div class="form-group">
                         <label>E-mail</label>
-                        <input type="text" name="email" maxlength="300" placeholder="Ex.: mail@example.com" required/>
+                        <input type="email" name="email" id="email" maxlength="300" placeholder="Ex.: mail@example.com" required/>
                     </div>
-                    <div class="form-control">
+                    <div class="form-group">
                         <label>CPF</label>
-                        <!-- <input type="text" name="cpf" placeholder="000.000.000-00" required/> -->
                         <input id="CPFInput" maxlength="11" placeholder="Insira apenas números" oninput="criaMascara('CPF')" required>
                         </div>
-                    <div class="form-control checkbox">
+                    <div class="form-group checkbox">
                         <input type="checkbox" > 
                         <label>Quero receber a newsletter da RCHLO!</label>
                     </div>
-                    <input class="submit-buttom" type="submit" value="Enviar">
                 </div>
 
-                <div class="form-group">
+                <div class="form-control">
                     <h4>Cartão de Crédito</h4>
-                    <div class="form-control">
-                        <label>Número - CVV</label>
-                        <input type="number" name="cvv" maxlength="3" required/>
-                    </div>
-                    <div class="form-control">
+                    <div class="form-group">
                         <label>Bandeira</label>
                         <select name="flag">
                             <option>Escolha uma opção...</option>
@@ -109,16 +292,69 @@
                             <option>American Express</option>
                         </select>
                     </div>
-                    <div class="form-control">
-                        <label>Validade</label>
-                        <input type="date" name="validate" required/>
+
+                    <div class="form-group">
+                        <label>Número do cartão</label>
+                        <input type="number" pattern="[0-9]" id="cardNumber" name="cardNumber" maxlength="16" required/>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Nome do titular</label>
+                        <input type="text" name="owner" id="owner" maxlength="16" required/>
+                    </div>
+
+                    <div class="form-group validate">
+                        <div class="validate-mounth">
+                            <div>
+                                <label>Validade</label>
+                                <div>
+                                    <select name="mounth">
+                                        <option>Mês</option>
+                                        <option>Janeiro</option>
+                                        <option>Fevereiro</option>
+                                        <option>Março</option>
+                                        <option>Abril</option>
+                                        <option>Maio</option>
+                                        <option>Junho</option>
+                                        <option>Julho</option>
+                                        <option>Agosto</option>
+                                        <option>Setembro</option>
+                                        <option>Outubro</option>
+                                        <option>Novembro</option>
+                                        <option>Dezembro</option>
+                                    </select>
+        
+                                    <select name="year">
+                                        <option>Ano</option>
+                                        <option>2022</option>
+                                        <option>2023</option>
+                                        <option>2024</option>
+                                        <option>2025</option>
+                                        <option>2026</option>
+                                        <option>2027</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div style="display: flex; flex-direction: column;">
+                                <label>CVV</label>
+                                <input type="number" pattern="[0-9]{3}" name="cvv" maxlength="3" required/>
+                            </div>
+                        </div>
                     </div>
                 </div>
+                <input class="submit-buttom" type="button" onclick="validateForm()" value="Enviar">
              
             </form>
         </section>
     </main>
 
-    
+    <section class="sucess-modal" id="sucess-modal">
+        <div>
+            <ion-icon class="close" name="close-outline" onclick="closeModal()"></ion-icon>
+            <ion-icon name="checkmark-circle-outline"></ion-icon>
+            <h1>Compra finalizada</h1>
+        </div>
+    </section>
 </body>
 </html>
