@@ -5,7 +5,22 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+    <script>
+    function criaMascara(mascaraInput) {
+        const maximoInput = document.getElementById(`${mascaraInput}Input`).maxLength;
+        let valorInput = document.getElementById(`${mascaraInput}Input`).value;
+        const mascaras = {
+        CPF: valorInput.replace(/[^\d]/g, "").replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4")
+        };
+
+        if (valorInput.length === maximoInput) {
+        (document.getElementById(`${mascaraInput}Input`).value = mascaras[mascaraInput])
+        }
+    };
+    </script>
 
     <link rel="stylesheet" href="checkoutStyles.css">
 
@@ -22,6 +37,11 @@
             <h6>Sacola</h6>
         </div>
     </header>
+
+    <div class="sub-header">
+        <h4>Ótima escolha!</h4>
+        <h5>Obrigado por comprar na RCHLO! Preencha seus dados para efetivar a compra.</h5>
+    </div>
 
     <main class="content">
         <section class="section-style product-section">
@@ -56,27 +76,29 @@
                     <h4>Dados Pessoais</h4>
                     <div class="form-control">
                         <label>Nome completo</label>
-                        <input type="text" name="fullName" required/>
+                        <input type="text" id="fullName" name="fullName" maxlength="200" required/>
                     </div>
                     <div class="form-control">
                         <label>E-mail</label>
-                        <input type="text" name="fullName" placeholder="mail@example.com" required/>
+                        <input type="text" name="email" maxlength="300" placeholder="Ex.: mail@example.com" required/>
                     </div>
                     <div class="form-control">
                         <label>CPF</label>
-                        <input type="text" name="fullName" placeholder="000.000.000-00" required/>
-                    </div>
+                        <!-- <input type="text" name="cpf" placeholder="000.000.000-00" required/> -->
+                        <input id="CPFInput" maxlength="11" placeholder="Insira apenas números" oninput="criaMascara('CPF')" required>
+                        </div>
                     <div class="form-control checkbox">
                         <input type="checkbox" > 
                         <label>Quero receber a newsletter da RCHLO!</label>
                     </div>
+                    <input class="submit-buttom" type="submit" value="Enviar">
                 </div>
 
                 <div class="form-group">
                     <h4>Cartão de Crédito</h4>
                     <div class="form-control">
                         <label>Número - CVV</label>
-                        <input type="text" name="number" required/>
+                        <input type="number" name="cvv" maxlength="3" required/>
                     </div>
                     <div class="form-control">
                         <label>Bandeira</label>
@@ -89,11 +111,10 @@
                     </div>
                     <div class="form-control">
                         <label>Validade</label>
-                        <input type="date" name="fullName" required/>
+                        <input type="date" name="validate" required/>
                     </div>
                 </div>
              
-                <input class="submit-buttom" type="submit" value="Enviar" >
             </form>
         </section>
     </main>

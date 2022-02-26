@@ -13,6 +13,7 @@
     padding: 0;
     box-sizing: border-box;
     font-family: 'Arboria', sans-serif;
+    
 }
 
 html {
@@ -29,6 +30,7 @@ h1, h2, h3, h4, h5, h6, label {
     flex-direction: column;
     align-items: center;
     gap: 10px;
+    background-color: var(--background-color);
 }
 
 .container .header {
@@ -70,6 +72,20 @@ h1, h2, h3, h4, h5, h6, label {
 .container .header .icon-wrapper h6 {
     font-size: 0.8rem;
     font-family: 'Arboria', sans-serif;
+}
+
+.container .sub-header {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    background-color: var(--background-color);
+    padding: 0 3rem;
+    gap: 15px;
+}
+
+.container .sub-header h4{
+    font-size: 2rem;
 }
 
 .content {
@@ -191,11 +207,23 @@ form .submit-buttom:hover {
     .content .product-section .image-wrapper img {
         height: 50%;
     }
+
+    .content .product-section .product-info div h5 {
+        font-size: 1rem;
+        font-weight: bold;
+        text-align: justify;
+    }
 }
 
 @media only screen and (max-width: 768px) {
     .content {
         flex-direction: column;
+        padding: 0 2rem;
+
+    }
+
+    .content .product-section {
+        align-items: center;
     }
 
     .content .product-section .image-wrapper {
@@ -203,10 +231,6 @@ form .submit-buttom:hover {
         height: 350px;
         background-size: contain;
         background-repeat: no-repeat;
-    }
-
-    .content {
-        padding: 0 1rem;
     }
 
     .container .header {
@@ -221,6 +245,12 @@ form .submit-buttom:hover {
     .container .header .icon-wrapper h6 {
         display: none;
     }
+
+    .content .product-section .product-info div h5 {
+    font-size: 1rem;
+    font-weight: bold;
+}
+
 
 }
 
