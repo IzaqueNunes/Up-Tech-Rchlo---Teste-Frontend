@@ -134,6 +134,26 @@ h1, h2, h3, h4, h5, h6, label {
     color: #797979;
 }
 
+.content .product-section .product-info button {
+    background-color:#CECECE;
+    border: none;
+    font-size: 2rem;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.content .product-section .product-info input {
+    border-radius: 4px;
+    border: 1px solid #797979;
+    background-color: #fff;
+    color: #333;
+    outline: none;
+    display: flex;
+    width: 60%;
+    padding: 1rem;
+}
+
 .form-section form {
     width: 100%;
     display: grid;
@@ -185,6 +205,32 @@ h1, h2, h3, h4, h5, h6, label {
      transition: 200ms all;
 }
 
+.fullNameError {
+    font-size: 0.8rem;
+    color: red;
+}
+.emailError {
+    font-size: 0.8rem;
+    color: red;
+}
+.cpfError {
+    font-size: 0.8rem;
+    color: red;
+}
+.cardNumberError {
+    font-size: 0.8rem;
+    color: red;
+}
+.ownerError {
+    font-size: 0.8rem;
+    color: red;
+}
+.cvvError {
+    font-size: 0.8rem;
+    color: red;
+}
+
+
 .form-group input {
     padding: 10px;
 }
@@ -194,6 +240,19 @@ h1, h2, h3, h4, h5, h6, label {
     flex-direction: row;
     align-items: center;
     gap: 5px;
+}
+
+.validate-wrapper {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+}
+
+.cvv-wrapper {
+    width: 30%;
+    display: flex; 
+    flex-direction: column;
+    justify-content: flex-end;
 }
 
 form .submit-buttom {
@@ -222,6 +281,11 @@ form .form-control .validate-mounth {
     flex-direction: row;
     padding: 0;
     gap: 10px;
+}
+
+footer {
+    display: flex;
+    justify-content: flex-end;
 }
 
 @media only screen and (max-width: 992px) {

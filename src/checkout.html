@@ -126,43 +126,45 @@
             let cardNumber = form["cardNumber"].value;
             let owner = form["owner"].value;
 
-    
-
             if(!userNameRegex.test(form["fullName"].value)){
                 document.getElementById("fullName").classList.add("form-input-error")
-                return document.getElementById("fullNameError").innerText = "error"
+                return document.getElementById("fullNameError").innerText = "Preencha o nome"
             } else {
                 document.getElementById("fullName").classList.remove("form-input-error")
                 document.getElementById("fullNameError").innerText = ""
 
             }
-            
-            if(!userNameRegex.test(form["owner"].value)){
-                return document.getElementById("owner").classList.add("form-input-error")
-            } else {
-                document.getElementById("owner").classList.remove("form-input-error")
-            }
-
                 
             if(!validateEmail(email)) {
-                return document.getElementById("email").classList.add("form-input-error")
+                document.getElementById("email").classList.add("form-input-error")
+                return document.getElementById("emailError").innerText = "Preencha o email"
             } else {
                 document.getElementById("email").classList.remove("form-input-error")
-
+                document.getElementById("emailError").innerText = ""
             }
 
             if(!validateCpf(CPFInput)) {
-                return document.getElementById("CPFInput").classList.add("form-input-error")
+                document.getElementById("CPFInput").classList.add("form-input-error")
+                return document.getElementById("cpfError").innerText = "Preencha o cpf"
             } else {
                 document.getElementById("CPFInput").classList.remove("form-input-error")
-
+                document.getElementById("cpfError").innerText = ""
             }
 
             if(!validateCard(cardNumber)) {
-                return document.getElementById("cardNumber").classList.add("form-input-error")
+                document.getElementById("cardNumber").classList.add("form-input-error")
+                return document.getElementById("cardNumberError").innerText = "Preencha o número do cartão"
             } else {
                 document.getElementById("cardNumber").classList.remove("form-input-error")
+                document.getElementById("cardNumberError").innerText = ""
+            }
 
+            if(!userNameRegex.test(form["owner"].value)){
+                document.getElementById("owner").classList.add("form-input-error")
+                return document.getElementById("ownerError").innerText = "Preencha o nome do titular"
+            } else {
+                document.getElementById("owner").classList.remove("form-input-error")
+                document.getElementById("ownerError").innerText = ""
             }
 
             document.getElementById("sucess-modal").style.visibility = 'visible'
@@ -172,21 +174,17 @@
 
         function incr() {
             let amount = document.getElementById("amount").value;
-
             let newAmount = document.getElementById("amount").value = parseInt(amount) + 1;
-            document.getElementById("totalAmount").innerText = parseInt(newAmount * 69.9);
-
+            let total = document.getElementById("totalAmount").innerText = (newAmount * 69.9).toFixed(2);
         }
 
         function decr() {
             let amount = document.getElementById("amount").value;
-
             if(parseInt(amount) === 1){
                 return 
             } 
-
             let newAmount = document.getElementById("amount").value = parseInt(amount) - 1;
-            document.getElementById("totalAmount").innerText = parseInt(newAmount * 69.9);
+            document.getElementById("totalAmount").innerText = (newAmount * 69.9).toFixed(2);
 
         }
 
@@ -229,15 +227,15 @@
 
             <div class="product-info">
                 <div>
-                    <h5>Quantidade:</h5> 
-                    <div style="display: flex; flex-direction: row; gap: 5px;">
+                    <h6>Quantidade:</h6> 
+                    <div style="display: flex; flex-direction: row; gap: 5px; justify-content: space-between;">
                         <button id="decrement" style="width: 50px" onclick="decr()">-</button>
                         <input id="amount" type="number" value="1"/>
                         <button id="increment" style="width: 50px" onclick="incr()">+</button>
                     </div>
                 </div>
-                <div>
-                    <label>Valor total: <span id="totalAmount">R$ 69</span></label>       
+                <div style="border-bottom: 1px solid #333; height: 5vh; margin-bottom: 1rem;">
+                    <h4>Valor total: R$<span id="totalAmount">69.90</span></h4>       
                 </div>
                 <div>
                     <h5>Produto:</h5> 
@@ -265,16 +263,18 @@
                     <div class="form-group">
                         <label>Nome completo</label>
                         <input type="text" id="fullName" pattern=”[a-zA-Z\s]+$” name="fullName" maxlength="200" required oninvalid="this.setCustomValidity('Digite o seu nome')" oninput="this.setCustomValidity('')"/>
-                        <span id="fullNameError"></span>
+                        <span id="fullNameError" class="fullNameError"></span>
                     </div>
                     <div class="form-group">
                         <label>E-mail</label>
                         <input type="email" name="email" id="email" maxlength="300" placeholder="Ex.: mail@example.com" required/>
+                        <span id="emailError" class="emailError"></span>
                     </div>
                     <div class="form-group">
                         <label>CPF</label>
                         <input id="CPFInput" maxlength="11" placeholder="Insira apenas números" oninput="criaMascara('CPF')" required>
-                        </div>
+                        <span id="cpfError" class="cpfError"></span>
+                    </div>
                     <div class="form-group checkbox">
                         <input type="checkbox" > 
                         <label>Quero receber a newsletter da RCHLO!</label>
@@ -295,17 +295,19 @@
 
                     <div class="form-group">
                         <label>Número do cartão</label>
-                        <input type="number" pattern="[0-9]" id="cardNumber" name="cardNumber" maxlength="16" required/>
+                        <input type="number" pattern="[0-9]" id="cardNumber" name="cardNumber" placeholder="Digite o número do cartão" maxlength="16" required/>
+                        <span id="cardNumberError" class="cardNumberError"></span>
                     </div>
 
                     <div class="form-group">
                         <label>Nome do titular</label>
-                        <input type="text" name="owner" id="owner" maxlength="16" required/>
+                        <input type="text" name="owner" id="owner" placeholder="Digite o nome do titular do cartão" maxlength="16" required/>
+                        <span id="ownerError" class="ownerError"></span>
                     </div>
 
                     <div class="form-group validate">
                         <div class="validate-mounth">
-                            <div>
+                            <div class="validate-wrapper">
                                 <label>Validade</label>
                                 <div>
                                     <select name="mounth">
@@ -336,14 +338,17 @@
                                 </div>
                             </div>
 
-                            <div style="display: flex; flex-direction: column;">
+                            <div class="cvv-wrapper">
                                 <label>CVV</label>
-                                <input type="number" pattern="[0-9]{3}" name="cvv" maxlength="3" required/>
+                                <input type="number" pattern="[0-9]{3}" name="cvv" placeholder="Código" maxlength="3" required/>
+                                <span id="cvvError" class="cvvError"></span>     
                             </div>
                         </div>
                     </div>
+                    <footer>
+                        <input class="submit-buttom" type="button" onclick="validateForm()" value="Enviar">
+                    </footer>
                 </div>
-                <input class="submit-buttom" type="button" onclick="validateForm()" value="Enviar">
              
             </form>
         </section>
