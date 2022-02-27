@@ -10,6 +10,7 @@
 
     <script>
 
+        // função para a máscara do CPF 000.000.000-00
         function criaMascara(mascaraInput) {
             const maximoInput = document.getElementById(`${mascaraInput}Input`).maxLength;
             let valorInput = document.getElementById(`${mascaraInput}Input`).value;
@@ -22,12 +23,14 @@
             }
         };
 
+        // regex para validação das bandeiras visa, mastercard e americanexpress
         var acceptedCreditCards = {
             visa: /^4[0-9]{12}(?:[0-9]{3})?$/,
             mastercard: /^5[1-5][0-9]{14}$|^2(?:2(?:2[1-9]|[3-9][0-9])|[3-6][0-9][0-9]|7(?:[01][0-9]|20))[0-9]{12}$/,
             amex: /^3[47][0-9]{13}$/
         };
 
+        //função para validar o cardão de crédito
         function validateCard(value) {
             var value = value.replace(/\D/g, '');
             var sum = 0;
@@ -55,9 +58,8 @@
             return valid && accepted;
         }
 
+        // função que seria para validar o cvv porém não obtive sucesso mesmo seguindo documentações
         function validateCVV(creditCard, cvv) {
-            var creditCard = creditCard.replace(/\D/g, '');
-            var cvv = cvv.replace(/\D/g, '');
             if ((acceptedCreditCards.amex).test(creditCard)) {
                 if((/^\d{4}$/).test(cvv))
                 return true;
@@ -67,6 +69,7 @@
             return false;
         }
 
+        // validando campo email
         function validateEmail(email) {
             return String(email)
                 .toLowerCase()
@@ -75,6 +78,7 @@
                 );
         }
 
+        // validando campo CPF
         function validateCpf(CPFInput) {
             var CPFInput = CPFInput.replace(/\D/g, '');
             let soma = 0
@@ -117,15 +121,19 @@
 
 
         function validateForm() {
+            // regex para o input do nome aceitar somente letras
             let userNameRegex = /^[a-zA-Z\s]+$/;
 
+            // buscando dados no formulario
             let form = document.forms["paymentForm"];
             let fullName = form["fullName"].value;
             let email = form["email"].value;
             let CPFInput = form["CPFInput"].value;
             let cardNumber = form["cardNumber"].value;
             let owner = form["owner"].value;
+            let cvv = form["cvv"].value;
 
+            //validando campos
             if(!userNameRegex.test(form["fullName"].value)){
                 document.getElementById("fullName").classList.add("form-input-error")
                 return document.getElementById("fullNameError").innerText = "Preencha o nome"
@@ -166,18 +174,28 @@
                 document.getElementById("owner").classList.remove("form-input-error")
                 document.getElementById("ownerError").innerText = ""
             }
-
+            
+            if(!validateCVV(cardNumber, cvv)){
+                document.getElementById("cvv").classList.add("form-input-error")
+                return document.getElementById("cvvError").innerText = "Preencha o cvv"
+            } else {
+                document.getElementById("cvv").classList.remove("form-input-error")
+                document.getElementById("cvvError").innerText = ""
+            }
+            
+            // alterando visibilidade do modal
             document.getElementById("sucess-modal").style.visibility = 'visible'
             document.getElementById("container").style.overflow = 'hidden'
-
         }
 
+        // função para incremento do input de quantidade
         function incr() {
             let amount = document.getElementById("amount").value;
             let newAmount = document.getElementById("amount").value = parseInt(amount) + 1;
             let total = document.getElementById("totalAmount").innerText = (newAmount * 69.9).toFixed(2);
         }
 
+        // função para decremento do input de quantidade
         function decr() {
             let amount = document.getElementById("amount").value;
             if(parseInt(amount) === 1){
@@ -188,14 +206,13 @@
 
         }
 
+        // função para fechar o modal ao clicar no X
         function closeModal() {
             document.getElementById("sucess-modal").style.visibility = 'hidden'
             document.getElementById("container").style.overflow = 'auto'
         }
 
     </script>
-
-
 
     <link rel="stylesheet" href="checkoutStyles.css">
 
@@ -221,8 +238,6 @@
     <main class="content">
         <section class="section-style product-section">
             <div class="image-wrapper">
-               <!--  <img src="https://static.riachuelo.com.br/RCHLO/14247984003/portrait/279d0565feb361cff852a6a792ffdb5c89890ba3.jpg" alt="Imagem produto"> -->
-            
             </div>
 
             <div class="product-info">
@@ -301,7 +316,7 @@
 
                     <div class="form-group">
                         <label>Nome do titular</label>
-                        <input type="text" name="owner" id="owner" placeholder="Digite o nome do titular do cartão" maxlength="16" required/>
+                        <input type="text" name="owner" id="owner" placeholder="Digite o nome do titular do cartão" required/>
                         <span id="ownerError" class="ownerError"></span>
                     </div>
 
@@ -340,7 +355,7 @@
 
                             <div class="cvv-wrapper">
                                 <label>CVV</label>
-                                <input type="number" pattern="[0-9]{3}" name="cvv" placeholder="Código" maxlength="3" required/>
+                                <input type="number" id="cvv" name="cvv" placeholder="Código" maxlength="3" required/>
                                 <span id="cvvError" class="cvvError"></span>     
                             </div>
                         </div>
